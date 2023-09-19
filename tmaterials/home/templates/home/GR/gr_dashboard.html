@@ -1,0 +1,691 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GR Dashboard</title>
+    <link rel="icon" href="{% static 'logo.png' %}" type="image/icon type">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #fbfbfb;
+      }
+      @media (min-width: 991.98px) {
+        main {
+          padding-left: 240px;
+        }
+      }
+
+      /* Sidebar */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        padding: 64px 0 0; /* Height of navbar */
+        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+        width: 260px;
+        z-index: 600;
+        overflow-y: scroll;
+      }
+
+      @media (max-width: 991.98px) {
+        .sidebar {
+          width: 100%;
+        }
+      }
+      .sidebar .active {
+        border-radius: 5px;
+        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+      }
+
+      .sidebar-sticky {
+        position: relative;
+        top: 0;
+        height: calc(100vh - 48px);
+        padding-top: 0.5rem;
+        overflow-x: hidden;
+        overflow-y: auto; /*Scrollable contents if viewport is shorter than content.*/
+      }      
+    </style>
+  </head>
+  <body>
+    <!--Main Navigation-->
+    <header>
+      <!-- Sidebar -->
+      <nav
+      id="sidebarMenu"
+      class="collapse d-lg-block sidebar bg-white container pb-5"
+      >
+        <div class="position-sticky new-navbar-sticky">
+          <div class="list-group list-group-flush mx-3 mt-4">
+              <a
+                href="{% url 'dashboard' %}"
+                class="list-group-item list-group-item-action py-3 ripple active"
+                aria-current="true"
+              >
+                <i class="fas fa-tachometer-alt fa-fw me-3"></i
+                ><span>Dashboard</span>
+              </a>
+              <a
+                href="{% url 'view_all_notifications' %}"
+                class="list-group-item list-group-item-action py-3 ripple"
+                aria-current="true"
+              >
+                <i class="fas fa-bullhorn fa-fw me-3"></i
+                ><span> Announcements </span>
+                </a>
+              <a
+                href="{% url 'view_all_deadlines' %}"
+                class="list-group-item list-group-item-action py-3 ripple"
+                aria-current="true"
+              >
+                <i class="fas fa-calendar fa-fw me-3"></i
+                ><span> Deadlines </span>
+                </a>
+              
+                <a
+                href="{% url 'view_all_evaluations' %}"
+                class="list-group-item list-group-item-action py-3 ripple"
+                aria-current="true"
+              >
+                <i class="fas fa-star-half fa-fw me-3"></i
+                ><span> Evaluations </span>
+                </a>
+
+                <a
+                href="{% url 'view_all_students' %}"
+                class="list-group-item list-group-item-action py-3 ripple"
+                aria-current="true"
+              >
+                <i class="fas fa-person-dots-from-line fa-fw me-3"></i
+                ><span> Students </span>
+                </a>
+              <button
+                class="list-group-item list-group-item-action py-3 ripple mt-2"
+                data-bs-toggle="modal"
+                data-bs-target="#add_slides_modal"
+              >
+                <i class="fas fa-book fa-fw me-3"></i
+                ><span> Add Slides</span>
+              </button>
+
+              <button
+                class="list-group-item list-group-item-action py-3 ripple mt-2"
+                data-bs-toggle="modal"
+                data-bs-target="#add_student_modal"
+              >
+                <i class="fas fa-person-dots-from-line fa-fw me-3"></i
+                ><span> Add Students</span>
+              </button>
+              
+              <button
+                class="list-group-item list-group-item-action py-3 ripple mt-2"
+                data-bs-toggle="modal"
+                data-bs-target="#upload_employee_modal"
+              >
+                <i class="fas fa-star-half fa-fw me-3"></i
+                ><span> Upload Students</span>
+              </button>
+
+              <button
+                class="list-group-item list-group-item-action py-3 ripple mt-2"
+                data-bs-toggle="modal"
+                data-bs-target="#add_notification_modal"
+              >
+                <i class="fas fa-bullhorn fa-fw me-3"></i
+                ><span> New Notification</span>
+              </button>
+
+              <button
+                class="list-group-item list-group-item-action py-3 ripple mt-2"
+                data-bs-toggle="modal"
+                data-bs-target="#add_deadline_modal"
+              >
+                <i class="fas fa-calendar fa-fw me-3"></i
+                ><span> Add Deadline</span>
+              </button>
+
+              <button
+                class="list-group-item list-group-item-action py-3 ripple mt-2"
+                data-bs-toggle="modal"
+                data-bs-target="#add_evaluation_modal"
+              >
+                <i class="fas fa-star-half fa-fw me-3"></i
+                ><span> Add Evaluation</span>
+              </button>
+            </div>
+          </div>
+        </nav>
+      <!-- Sidebar -->
+      <!-- Navbar -->
+      <nav
+        id="main-navbar"
+        class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+      >
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+          <div style="font-size: 20px" class="me-5">
+            {{ request.user.email }}
+          </div>
+          <!-- Toggle button -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#sidebarMenu"
+            aria-controls="sidebarMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+          <!-- Right links -->
+          <ul class="navbar-nav ms-auto d-flex flex-row">
+            <!-- Notification dropdown -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow"
+                href="#"
+                id="navbarDropdownMenuLink"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fas fa-bell"></i>
+                <span class="badge rounded-pill badge-notification bg-danger"
+                  >{{all_notifications_count}}</span
+                >
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdownMenuLink"
+              >
+              {% for all_notifications in all_notifications %}
+                
+                <button
+                  class="list-group-item list-group-item-action py-3 ripple mt-2"
+                  data-bs-toggle="modal"
+                  data-bs-target=""
+                >
+                  <i class="fas fa-chart-area fa-fw me-3"></i
+                  ><span>{{ all_notifications.information }}</span>
+                </button>
+                <!-- <hr class="border-1 border-top" /> -->
+              {% endfor %}
+              </ul>
+            </li>
+
+            <!-- Avatar -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center"
+                href="#"
+                id="navbarDropdownMenuLink"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"
+                  class="rounded-circle me-2"
+                  height="22"
+                  alt="Avatar"
+                  loading="lazy"
+                />
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end mt-2"
+                aria-labelledby="navbarDropdownMenuLink"
+              >
+              <li>
+                <a class="dropdown-item" href="{% url 'edit_profilepage' %}">Profile</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'request_logout' %}">Logout</a>
+              </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <!-- Container wrapper -->
+      </nav>
+      <!-- Navbar -->
+    </header>
+    <!--Main Navigation-->
+
+    <!--Main layout-->
+    <main style="margin-top: 58px">
+      <div class="container pt-5">
+        <div class="input-group">
+          <input
+            type="search"
+            class="form-control rounded ms-xl-5"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="search-addon"
+          />
+          <button type="button" class="btn btn-outline-primary me-5">
+            search
+          </button>
+        </div>
+        <!-- message error alert -->        
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-secondary alert-dismissible fade show ms-5 me-5" role="alert">
+              <strong {% if message.tags %}>{{ message.tags }} {% endif %}</strong>  - {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <!-- end of message error -->
+      </div>
+      <div style="margin-top: 2px" class="container">
+        <div class="row me-4 ms-4">
+          {% for all_slides in all_slides %}
+          <div class="col-sm-6" style="margin-top: 19px">
+            <div class="text-end">
+              <button type="button" class="btn btn-outline-primary"><a href="./sub/del/{{ all_slides.id }}">X</a>
+              </button>
+            </div>
+            <div class="card">
+              <button
+                type="button"
+                class="btn btn-secondary btn-lg col"
+                style="padding: 18px"
+              >
+                <a href="{{ all_slides.link }}">
+                  {{ all_slides.sub_name }} ({{ all_slides.code }})
+                </a>
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>     
+    </main>
+    <!-- modals -->
+
+    <!-- Add Subject -->
+    <div
+      class="modal fade"
+      id="add_slides_modal"
+      tabindex="-1"
+      aria-labelledby="add_slides_modal_label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Subject</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'add_subject' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row mb-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label"
+                  >Subject</label
+                >
+                <div class="col-sm-8 me-1">
+                  <input type="text" class="form-control" id="inputEmail3" for="sub_name" name="sub_name" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label"
+                  >Code</label
+                >
+                <div class="col-sm-8 me-1">
+                  <input type="text" class="form-control" id="inputEmail3" for="sub_code" name="sub_code" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="inputPassword3" class="col-sm-2 col-form-label"
+                  >Link</label
+                >
+                <div class="col-sm-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputPassword3"
+                    for="sub_link"
+                    name="sub_link"
+                  />
+                </div>
+              </div>
+            </div>
+          <div class="modal-footer">
+            <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Notification -->
+    <div
+      class="modal fade"
+      id="add_notification_modal"
+      tabindex="-1"
+      aria-labelledby="add_noti_modal_label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Notification</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'new_noti' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Enter The notification Details !</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="noti_details" for="noti_details" rows="3"></textarea>
+              </div>
+          <div class="modal-footer">
+            <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!--Add Deadline Modal-->
+    <div
+      class="modal fade"
+      id="add_deadline_modal"
+      tabindex="-1"
+      aria-labelledby="add_deadline_modal_label"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Deadline</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'add_deadline' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row mb-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label"
+                  >Subject</label
+                >
+                <div class="col-sm-8 me-1">
+                  <!-- <input type="text" class="form-control" id="inputEmail3" for="sub_name" name="sub_name" /> -->
+                  <select class="form-select" for="sub_name" name="sub_name" aria-label="Default select example">
+                    <option selected>Select Subject</option>
+                    {% for all_subj in all_subj %}
+                      <option value="{{all_subj.pk}}">{{all_subj.sub_name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Enter The Deadline Details !</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="deadline_info" for="deadline_info" rows="3"></textarea>
+              </div>
+              <div class="modal-footer">
+              <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              >
+              Close
+              </button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!--Add Evaluation Modal-->
+    <div
+      class="modal fade"
+      id="add_evaluation_modal"
+      tabindex="-1"
+      aria-labelledby="add_evaluation_modal_label"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Evaluation</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'add_evaluation' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row mb-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label"
+                  >Subject</label
+                >
+                <div class="col-sm-8 me-1">
+                  <!-- <input type="text" class="form-control" id="inputEmail3" for="sub_name" name="sub_name" /> -->
+                  <select class="form-select" for="sub_name" name="sub_name" aria-label="Default select example">
+                    <option selected>Select Subject</option>
+                    {% for all_subj in all_subj %}
+                      <option value="{{all_subj.pk}}">{{all_subj.sub_name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label"
+                  >Type</label
+                >
+                <div class="col-sm-8 me-1">
+                  <input type="text" class="form-control" id="inputEmail3" for="eval_room" name="eval_type" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label"
+                >Room</label
+                >
+                <div class="col-sm-8 me-1">
+                  <input type="text" class="form-control" id="inputEmail3" for="eval_room" name="eval_room" />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Enter The Evaluation Syllabus!</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="eval_information" for="eval_information" rows="3"></textarea>
+              </div>
+              <div class="modal-footer">
+              <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              >
+              Close
+              </button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!--Main layout-->
+    <!--Add Students Modal-->
+    <div
+      class="modal fade"
+      id="add_student_modal"
+      tabindex="-1"
+      aria-labelledby="add_student_modal_label"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'add_student' %}" class="row g-3" method="POST" onsubmit ="return validate_passwords()" enctype="multipart/form-data">
+              {% csrf_token %}
+              <h5 style="color: red; font-size:16px" id="passcheckerror"></h5>
+              <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">First Name</label>
+                <input type="text" class="form-control" name="first_name" for="first_name" id="inputEmail4">
+              </div>
+              <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="Last_name" for="Last_name" id="inputPassword4">
+              </div>
+              <div class="col-12">
+                <label for="inputAddress" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" for="email" id="this_email" placeholder="">
+              </div>
+              <div class="col-12">
+                <label for="inputAddress" class="form-label">Roll Number</label>
+                <input type="text" class="form-control" name="stu_roll" for="stu_roll" id="inputAddress" placeholder="">
+              </div>
+              <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Password</label>
+                <input type="password" class="form-control" name="pass1" for="pass1" id="pass1">
+              </div>
+              <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="pass2" for="pass2" id="pass2">
+              </div>
+              <div class="modal-footer">
+              <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              >
+              Close
+              </button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!-- upload_employee_modal -->
+    <div class="modal fade" id="upload_employee_modal" tabindex="-1" aria-labelledby="upload_employee_modal_label" aria-hidden="true">
+      <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h2 class="modal-title fs-3" id="exampleModalLabel">Add Students</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <p>
+                  <h6>Read carefully before uploading Information</h6>
+                  <li>File format must be .csv or .xlsx</li>
+                  <li>Compulsory Columns are Email, First Name, Last Name and Roll No ID.</li>
+                  <li>You can shuffle the the columns but interchanging data of 1 column with other is not accepted.</li>
+                  <li>
+                      See the format of uploading as attached header column must be same.
+                      <a href="{% static 'studentDemo.xlsx' %}" download="Demo"> Download format</a>
+                  </li>
+              </p>
+              <form action="{% url 'student_upload' %}" method="POST" enctype="multipart/form-data" onsubmit="call_preloader1()">
+                  {% csrf_token %}
+                  <input type="file" name="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="input-field" required>
+                  
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+          </div>
+      </div>
+      </div>
+  </div>
+</div>
+    <!--Main layout-->
+  </body>
+  <!-- MDB -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script 
+    type="text/javascript"
+    src="{% static 'check_pass.js' %}"
+  ></script>
+</html>

@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignUp</title>
+    <link rel="icon" href="{% static 'logo.png' %}" type="image/icon type" />
+    <link href="{% static 'home.css'%}" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section class="background-radial-gradient overflow-hidden">
+      <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+        <div class="row gx-lg-5 align-items-center mb-5">
+          <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+            <h1
+              class="my-5 display-5 fw-bold ls-tight"
+              style="color: hsl(218, 81%, 95%)"
+            >
+              T -
+              <span style="color: hsl(218, 81%, 75%)">Material</span>
+            </h1>
+            <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+              🡆 A Portal with all the study Materials given by the Lecturer,
+              which are uploaded by you (GR) for your group.
+              <br />
+              🡆 If you are Student, Than you can
+              <a href="{% url 'home' %}">SignIn</a> here.
+              <br />
+              🡆 If you dont Don't have Signed Up yet then you can signup now.
+              <br />
+              🡆 If you are GR of your Group and you Group is Registered with us,
+              Than you can
+              <a href="{% url 'home' %}">SignIn</a> here.
+              <br />
+              🡆 As New GR of your Group you can ask old GR to transfer GR Access
+              to you from Students Section.
+              <br />
+              🡆 As GR of your Group Your Duty is to add The material on Gdrive
+              and add that link to our website.
+              <br />
+              🡆 As GR of your Group you can Add Notification that floats to all
+              the students on their email.
+              <br />
+              🡆 As GR of your Group you can Add Students either with xlsx or csv
+              file, or you can add student 1 by 1.
+              <br />
+              🡆 As GR of your Group you can Add Deadlines and Evaluation
+              Details.
+            </p>
+          </div>
+
+          <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+            <div
+              id="radius-shape-1"
+              class="position-absolute rounded-circle shadow-5-strong"
+            ></div>
+            <div
+              id="radius-shape-2"
+              class="position-absolute shadow-5-strong"
+            ></div>
+
+            <div class="card bg-glass">
+              <div class="card-body px-4 py-5 px-md-5">
+                {% for message in messages %}
+                <li
+                  {%
+                  if
+                  message.tags
+                  %}
+                  class="{{ message.tags }}"
+                  {%
+                  endif
+                  %}
+                >
+                  {{ message }}
+                </li>
+                {% endfor %}
+                <form
+                  action=""
+                  method="POST"
+                  onsubmit="return validate_passwords()"
+                  enctype="multipart/form-data"
+                >
+                  <h5
+                    style="color: red; font-size: 16px"
+                    id="passcheckerror"
+                  ></h5>
+                  {% csrf_token %}
+                  <!-- Email input -->
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <input
+                          type="text"
+                          name="first_name"
+                          for="first_name"
+                          id="form3Example1"
+                          class="form-control"
+                        />
+                        <label class="form-label">First name</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <input
+                          type="text"
+                          name="last_name"
+                          for="last_name"
+                          id="form3Example2"
+                          class="form-control"
+                        />
+                        <label class="form-label">Last name</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <input
+                          type="text"
+                          name="rollno"
+                          for="rollno"
+                          id="form3Example1"
+                          class="form-control"
+                        />
+                        <label class="form-label">Roll Number</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <input
+                          type="text"
+                          name="group"
+                          for="group"
+                          id="form3Example2"
+                          class="form-control"
+                        />
+                        <label class="form-label">Group</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input
+                      type="email"
+                      id="this_email"
+                      class="form-control"
+                      name="email"
+                      for="email"
+                    />
+                    <label class="form-label" for="form3Example3"
+                      >Email address</label
+                    >
+                  </div>
+
+                  <!-- Password input -->
+                  <div class="form-outline mb-4">
+                    <input
+                      type="password"
+                      id="pass1"
+                      class="form-control"
+                      name="pass1"
+                      for="pass1"
+                    />
+                    <label class="form-label" for="form3Example4"
+                      >Password</label
+                    >
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input
+                      type="password"
+                      id="pass2"
+                      class="form-control"
+                      name="pass2"
+                      for="pass2"
+                    />
+                    <label class="form-label" for="form3Example4"
+                      >Confirm Password</label
+                    >
+                  </div>
+
+                  <!-- Checkbox -->
+                  <div class="form-check d-flex justify-content-center mb-4">
+                    <input
+                      class="form-check-input me-2"
+                      type="checkbox"
+                      value=""
+                      id="form2Example33"
+                      checked
+                    />
+                    <label class="form-check-label" for="form2Example33">
+                      Remember Password
+                    </label>
+                  </div>
+
+                  <!-- Submit button -->
+                  <button type="submit" class="btn btn-primary btn-block mb-4">
+                    Sign Up
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Section: Design Block -->
+  </body>
+  <!-- MDB -->
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"
+  ></script>
+  <script src="{% static 'check_pass.js' %}"></script>
+</html>
